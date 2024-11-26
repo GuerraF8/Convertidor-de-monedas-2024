@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>💱 Convertidor de Monedas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --container-bg: rgba(255, 255, 255, 0.9);
+            --text-color: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            background: var(--container-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 1000px;
+            width: 95%;
+            display: flex;
+            gap: 40px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .input-section, .result-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            font-size: 2em;
+            margin-bottom: 30px;
+            animation: slideDown 1s ease-out;
+        }
+
+        h1 i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .currency-selector {
+            position: relative;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            outline: none;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            outline: none;
+            border-color: #2ecc71;
+        }
+
+        .currency-selector button {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            width: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .currency-selector button:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        .currency-list {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none; /* Cambiado de opacity: 0 a display: none */
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .currency-list.show {
+            display: block;
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .currency-list div {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .currency-list div:last-child {
+            border-bottom: none;
+        }
+
+        .currency-list div:hover {
+            background: #f8f9fa;
+            color: var(--primary-color);
+            transform: translateX(5px);
+            padding-left: 25px;
+        }
+
+        /* Estilo para el scrollbar de la lista */
+        .currency-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .currency-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .currency-list::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        button[type="submit"] {
+            background: var(--secondary-color);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        #result {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            min-height: 150px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        #result.success {
+            border-left: 5px solid var(--secondary-color);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        #result.error {
+            border-left: 5px solid #e74c3c;
+            background: #fff5f5;
+            color: #c0392b;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Theme toggler */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --background-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            --container-bg: rgba(44, 62, 80, 0.9);
+            --text-color: #ecf0f1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <div class="input-section">
+            <h1><i class="fas fa-exchange-alt"></i>Convertidor de Monedas</h1>
+            <form id="converter-form">
+                <div>
+                    <label>💱 Moneda de Origen</label>
+                    <div class="currency-selector">
+                        <input type="text" id="from-currency" placeholder="Ej: USD" required autocomplete="off">
+                        <button type="button" id="from-list-button">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="from-currency-list" class="currency-list"></div>
+                    </div>
+                </div>
+                <div>
+                    <label>🎯 Moneda de Destino</label>
+                    <div class="currency-selector">
+                        <input type="text" id="to-currency" placeholder="Ej: EUR" required autocomplete="off">
+                        <button type="button" id="to-list-button">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="to-currency-list" class="currency-list"></div>
+                    </div>
+                </div>
+                <div>
+                    <label>💰 Monto a Convertir</label>
+                    <input type="number" id="amount" placeholder="Ej: 100.00" step="any" required>
+                </div>
+                <button type="submit">
+                    <i class="fas fa-calculator"></i> Convertir
+                </button>
+            </form>
+        </div>
+
+        <div class="result-section">
+            <h1><i class="fas fa-chart-line"></i>Resultado</h1>
+            <div id="result">
+                <i class="fas fa-info-circle"></i> Ingresa los datos para ver el resultado aquí.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL del Servicio de Conversión
+        const conversionApiUrl = 'https://opcion2.mezaguerra.com/api';
+
+        // let currencies = []; // Removed redeclaration
+
+        // Obtener lista de monedas al cargar la página
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(`${conversionApiUrl}/currencies`);
+                currencies = await response.json();
+            } catch (error) {
+                console.error('Error al obtener la lista de monedas:', error);
+            }
+        });
+
+        // Reemplazar los objetos currencyNames y currencyToCountry con uno solo
+        const currencies = {
+            'USD': { name: 'Dólar estadounidense', flag: 'us' },
+            'EUR': { name: 'Euro', flag: 'eu' },
+            'GBP': { name: 'Libra esterlina', flag: 'gb' },
+            'JPY': { name: 'Yen japonés', flag: 'jp' },
+            'AUD': { name: 'Dólar australiano', flag: 'au' },
+            'CAD': { name: 'Dólar canadiense', flag: 'ca' },
+            'CHF': { name: 'Franco suizo', flag: 'ch' },
+            'CNY': { name: 'Yuan chino', flag: 'cn' },
+            'HKD': { name: 'Dólar de Hong Kong', flag: 'hk' },
+            'NZD': { name: 'Dólar neozelandés', flag: 'nz' },
+            'SEK': { name: 'Corona sueca', flag: 'se' },
+            'KRW': { name: 'Won surcoreano', flag: 'kr' },
+            'SGD': { name: 'Dólar de Singapur', flag: 'sg' },
+            'NOK': { name: 'Corona noruega', flag: 'no' },
+            'MXN': { name: 'Peso mexicano', flag: 'mx' },
+            'INR': { name: 'Rupia india', flag: 'in' },
+            'RUB': { name: 'Rublo ruso', flag: 'ru' },
+            'ZAR': { name: 'Rand sudafricano', flag: 'za' },
+            'TRY': { name: 'Lira turca', flag: 'tr' },
+            'BRL': { name: 'Real brasileño', flag: 'br' },
+            'TWD': { name: 'Nuevo dólar taiwanés', flag: 'tw' },
+            'DKK': { name: 'Corona danesa', flag: 'dk' },
+            'PLN': { name: 'Złoty polaco', flag: 'pl' },
+            'THB': { name: 'Baht tailandés', flag: 'th' },
+            'IDR': { name: 'Rupia indonesia', flag: 'id' },
+            'HUF': { name: 'Forinto húngaro', flag: 'hu' },
+            'CZK': { name: 'Corona checa', flag: 'cz' },
+            'ILS': { name: 'Nuevo séquel israelí', flag: 'il' },
+            'CLP': { name: 'Peso chileno', flag: 'cl' },
+            'PHP': { name: 'Peso filipino', flag: 'ph' },
+            'AED': { name: 'Dírham de EAU', flag: 'ae' },
+            'COP': { name: 'Peso colombiano', flag: 'co' },
+            'SAR': { name: 'Riyal saudí', flag: 'sa' },
+            'MYR': { name: 'Ringgit malayo', flag: 'my' },
+            'RON': { name: 'Leu rumano', flag: 'ro' }
+        };
+
+        // Replace the toggleCurrencyList function with this complete version
+        function toggleCurrencyList(listId, inputId) {
+            const listElement = document.getElementById(listId);
+            const inputElement = document.getElementById(inputId);
+
+            function filterCurrencies(searchText) {
+                listElement.innerHTML = '';
+                const searchLower = searchText.toLowerCase();
+                
+                // First, show currencies from predefined list
+                Object.entries(currencies).forEach(([code, data]) => {
+                    if (code.toLowerCase().includes(searchLower) || 
+                        data.name.toLowerCase().includes(searchLower)) {
+                        addCurrencyToList(code, data);
+                    }
+                });
+
+                // Then, show currencies from API that aren't in predefined list
+                if (Array.isArray(window.apiCurrencies)) {
+                    window.apiCurrencies.forEach(code => {
+                        if (!currencies[code] && code.toLowerCase().includes(searchLower)) {
+                            addCurrencyToList(code);
+                        }
+                    });
+                }
+
+                function addCurrencyToList(code, data = null) {
+                    const div = document.createElement('div');
+                    if (data) {
+                        // Currency with predefined data
+                        div.innerHTML = `
+                            <span class="fi fi-${data.flag}"></span>
+                            <span style="margin-left: 8px;">
+                                <strong>${code}</strong>
+                                <span style="color: #666; font-size: 0.9em; margin-left: 5px;">
+                                    ${data.name}
+                                </span>
+                            </span>
+                        `;
+                    } else {
+                        // Currency without predefined data
+                        div.innerHTML = `
+                            <span style="width: 1.5em; text-align: center;">🌐</span>
+                            <span style="margin-left: 8px;">
+                                <strong>${code}</strong>
+                            </span>
+                        `;
+                    }
+                    div.addEventListener('click', () => {
+                        inputElement.value = code;
+                        listElement.classList.remove('show');
+                    });
+                    listElement.appendChild(div);
+                }
+            }
+
+            // Add input event listener for search functionality
+            inputElement.addEventListener('input', (e) => {
+                const searchText = e.target.value;
+                if (!listElement.classList.contains('show')) {
+                    listElement.classList.add('show');
+                }
+                filterCurrencies(searchText);
+            });
+
+            // Toggle list visibility on button click
+            if (!listElement.classList.contains('show')) {
+                filterCurrencies(inputElement.value);
+                listElement.classList.add('show');
+            } else {
+                listElement.classList.remove('show');
+            }
+        }
+
+        // Store API currencies globally when fetched
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(`${conversionApiUrl}/currencies`);
+                window.apiCurrencies = await response.json();
+            } catch (error) {
+                console.error('Error al obtener la lista de monedas:', error);
+            }
+        });
+
+        document.getElementById('from-list-button').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleCurrencyList('from-currency-list', 'from-currency');
+        });
+
+        document.getElementById('to-list-button').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleCurrencyList('to-currency-list', 'to-currency');
+        });
+
+        // Ocultar las listas si se hace clic fuera de ellas
+        document.addEventListener('click', (event) => {
+            const lists = document.querySelectorAll('.currency-list');
+            lists.forEach(list => {
+                if (!event.target.closest('.currency-selector')) {
+                    list.classList.remove('show');
+                }
+            });
+        });
+
+        document.getElementById('converter-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const fromCurrency = document.getElementById('from-currency').value.trim().toUpperCase();
+            const toCurrency = document.getElementById('to-currency').value.trim().toUpperCase();
+            const amount = document.getElementById('amount').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            // Limpiar resultados anteriores
+            resultDiv.innerText = '';
+            resultDiv.classList.remove('error');
+
+            // Validación básica
+            if (!fromCurrency || !toCurrency || !amount) {
+                resultDiv.innerText = 'Por favor, completa todos los campos.';
+                resultDiv.classList.add('error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${conversionApiUrl}/convert`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        from_currency: fromCurrency,
+                        to_currency: toCurrency,
+                        amount: parseFloat(amount)
+                    })
+                });
+                const data = await response.json();
+                if (data.converted_amount) {
+                    resultDiv.innerHTML = `
+                    <div style="font-size: 1.2em; margin-bottom: 15px;">
+                        <span style="color: #2ecc71">💱 Resultado de la conversión:</span>
+                    </div>
+                    <div style="font-size: 1.4em; margin-bottom: 10px;">
+                        ${data.original_amount} ${data.from_currency} = 
+                        <strong style="color: #3498db">${data.converted_amount.toFixed(5)} ${data.to_currency}</strong>
+                    </div>
+                    <div style="color: #7f8c8d; font-size: 0.9em;">
+                        📈 Tasa de cambio: ${data.exchange_rate}
+                    </div>
+                `;
+                    resultDiv.classList.add('success');
+                } else if (data.error) {
+                    resultDiv.innerText = `Error: ${data.error}`;
+                    resultDiv.classList.add('error');
+                } else {
+                    resultDiv.innerText = 'Error al realizar la conversión.';
+                    resultDiv.classList.add('error');
+                }
+            } catch (error) {
+                console.error('Error al convertir:', error);
+                resultDiv.innerText = `Error al realizar la conversión: ${error.message}`;
+                resultDiv.classList.add('error');
+            }
+        });
+
+        // Agregar función para cambiar tema
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const themeToggle = document.querySelector('.theme-toggle i');
+            
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                themeToggle.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.className = 'fas fa-sun';
+            }
+        }
+    </script>
+</body>
+</html>
