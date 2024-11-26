@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>💱 Convertidor de Monedas</title>
@@ -33,7 +34,7 @@
         .container {
             background: var(--container-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 40px;
             max-width: 1000px;
             width: 95%;
@@ -44,7 +45,8 @@
             animation: fadeIn 1s ease-in-out;
         }
 
-        .input-section, .result-section {
+        .input-section,
+        .result-section {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -72,15 +74,16 @@
             gap: 10px;
         }
 
-        input[type="text"], input[type="number"] {
+        input[type="text"],
+        input[type="number"] {
             width: 100%;
             padding: 15px 20px;
             border: 2px solid var(--primary-color);
             border-radius: 12px;
             font-size: 16px;
             transition: all 0.3s ease;
-            background: rgba(255,255,255,0.9);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         input:focus {
@@ -89,7 +92,8 @@
             outline: none;
         }
 
-        input[type="text"]:focus, input[type="number"]:focus {
+        input[type="text"]:focus,
+        input[type="number"]:focus {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
             outline: none;
@@ -117,11 +121,12 @@
             width: 100%;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
             max-height: 200px;
             overflow-y: auto;
             z-index: 1000;
-            display: none; /* Cambiado de opacity: 0 a display: none */
+            display: none;
+            /* Cambiado de opacity: 0 a display: none */
             transform: translateY(0);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -136,6 +141,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -202,7 +208,7 @@
             border-radius: 15px;
             padding: 30px;
             min-height: 150px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             font-size: 1.2em;
             line-height: 1.6;
@@ -220,8 +226,15 @@
         }
 
         @keyframes slideIn {
-            from { transform: translateX(-20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         /* Theme toggler */
@@ -295,6 +308,7 @@
         }
     </style>
 </head>
+
 <body>
     <button class="theme-toggle" onclick="toggleTheme()">
         <i class="fas fa-moon"></i>
@@ -350,177 +364,175 @@
         document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await fetch(`${conversionApiUrl}/currencies`);
-                currencies = await response.json();
+                window.apiCurrencies = await response.json();
             } catch (error) {
                 console.error('Error al obtener la lista de monedas:', error);
             }
         });
 
-        
         const currencies = {
-    'AED': { name: 'Dírham de EAU', flag: 'ae' },
-    'AFN': { name: 'Afgani afgano', flag: 'af' },
-    'ALL': { name: 'Lek albanés', flag: 'al' },
-    'AMD': { name: 'Dram armenio', flag: 'am' },
-    'ANG': { name: 'Florín antillano neerlandés', flag: 'an' },
-    'AOA': { name: 'Kwanza angoleño', flag: 'ao' },
-    'ARS': { name: 'Peso argentino', flag: 'ar' },
-    'AUD': { name: 'Dólar australiano', flag: 'au' },
-    'AWG': { name: 'Florín arubeño', flag: 'aw' },
-    'AZN': { name: 'Manat azerí', flag: 'az' },
-    'BAM': { name: 'Marco convertible bosnio', flag: 'ba' },
-    'BBD': { name: 'Dólar de Barbados', flag: 'bb' },
-    'BDT': { name: 'Taka bangladesí', flag: 'bd' },
-    'BGN': { name: 'Lev búlgaro', flag: 'bg' },
-    'BHD': { name: 'Dinar bahreiní', flag: 'bh' },
-    'BIF': { name: 'Franco burundés', flag: 'bi' },
-    'BMD': { name: 'Dólar de Bermudas', flag: 'bm' },
-    'BND': { name: 'Dólar de Brunéi', flag: 'bn' },
-    'BOB': { name: 'Boliviano', flag: 'bo' },
-    'BRL': { name: 'Real brasileño', flag: 'br' },
-    'BSD': { name: 'Dólar bahameño', flag: 'bs' },
-    'BTN': { name: 'Ngultrum butanés', flag: 'bt' },
-    'BWP': { name: 'Pula botsuano', flag: 'bw' },
-    'BYN': { name: 'Rublo bielorruso', flag: 'by' },
-    'BZD': { name: 'Dólar de Belice', flag: 'bz' },
-    'CAD': { name: 'Dólar canadiense', flag: 'ca' },
-    'CDF': { name: 'Franco congoleño', flag: 'cd' },
-    'CHF': { name: 'Franco suizo', flag: 'ch' },
-    'CLP': { name: 'Peso chileno', flag: 'cl' },
-    'CNY': { name: 'Yuan chino', flag: 'cn' },
-    'COP': { name: 'Peso colombiano', flag: 'co' },
-    'CRC': { name: 'Colón costarricense', flag: 'cr' },
-    'CUP': { name: 'Peso cubano', flag: 'cu' },
-    'CVE': { name: 'Escudo caboverdiano', flag: 'cv' },
-    'CZK': { name: 'Corona checa', flag: 'cz' },
-    'DJF': { name: 'Franco yibutiano', flag: 'dj' },
-    'DKK': { name: 'Corona danesa', flag: 'dk' },
-    'DOP': { name: 'Peso dominicano', flag: 'do' },
-    'DZD': { name: 'Dinar argelino', flag: 'dz' },
-    'EGP': { name: 'Libra egipcia', flag: 'eg' },
-    'ERN': { name: 'Nakfa eritreo', flag: 'er' },
-    'ETB': { name: 'Birr etíope', flag: 'et' },
-    'EUR': { name: 'Euro', flag: 'eu' },
-    'FJD': { name: 'Dólar fiyiano', flag: 'fj' },
-    'FKP': { name: 'Libra malvinense', flag: 'fk' },
-    'FOK': { name: 'Corona feroesa', flag: 'fo' },
-    'GBP': { name: 'Libra esterlina', flag: 'gb' },
-    'GEL': { name: 'Lari georgiano', flag: 'ge' },
-    'GGP': { name: 'Libra de Guernsey', flag: 'gg' },
-    'GHS': { name: 'Cedi ghanés', flag: 'gh' },
-    'GIP': { name: 'Libra de Gibraltar', flag: 'gi' },
-    'GMD': { name: 'Dalasi gambiano', flag: 'gm' },
-    'GNF': { name: 'Franco guineano', flag: 'gn' },
-    'GTQ': { name: 'Quetzal guatemalteco', flag: 'gt' },
-    'GYD': { name: 'Dólar guyanés', flag: 'gy' },
-    'HKD': { name: 'Dólar de Hong Kong', flag: 'hk' },
-    'HNL': { name: 'Lempira hondureño', flag: 'hn' },
-    'HRK': { name: 'Kuna croata', flag: 'hr' },
-    'HTG': { name: 'Gourde haitiano', flag: 'ht' },
-    'HUF': { name: 'Forinto húngaro', flag: 'hu' },
-    'IDR': { name: 'Rupia indonesia', flag: 'id' },
-    'ILS': { name: 'Nuevo séquel israelí', flag: 'il' },
-    'IMP': { name: 'Libra de la Isla de Man', flag: 'im' },
-    'INR': { name: 'Rupia india', flag: 'in' },
-    'IQD': { name: 'Dinar iraquí', flag: 'iq' },
-    'IRR': { name: 'Rial iraní', flag: 'ir' },
-    'ISK': { name: 'Corona islandesa', flag: 'is' },
-    'JEP': { name: 'Libra de Jersey', flag: 'je' },
-    'JMD': { name: 'Dólar jamaicano', flag: 'jm' },
-    'JOD': { name: 'Dinar jordano', flag: 'jo' },
-    'JPY': { name: 'Yen japonés', flag: 'jp' },
-    'KES': { name: 'Chelín keniano', flag: 'ke' },
-    'KGS': { name: 'Som kirguís', flag: 'kg' },
-    'KHR': { name: 'Riel camboyano', flag: 'kh' },
-    'KID': { name: 'Dólar de Kiribati', flag: 'ki' },
-    'KMF': { name: 'Franco comorense', flag: 'km' },
-    'KRW': { name: 'Won surcoreano', flag: 'kr' },
-    'KWD': { name: 'Dinar kuwaití', flag: 'kw' },
-    'KYD': { name: 'Dólar de las Islas Caimán', flag: 'ky' },
-    'KZT': { name: 'Tenge kazajo', flag: 'kz' },
-    'LAK': { name: 'Kip laosiano', flag: 'la' },
-    'LBP': { name: 'Libra libanesa', flag: 'lb' },
-    'LKR': { name: 'Rupia de Sri Lanka', flag: 'lk' },
-    'LRD': { name: 'Dólar liberiano', flag: 'lr' },
-    'LSL': { name: 'Loti lesotense', flag: 'ls' },
-    'LYD': { name: 'Dinar libio', flag: 'ly' },
-    'MAD': { name: 'Dírham marroquí', flag: 'ma' },
-    'MDL': { name: 'Leu moldavo', flag: 'md' },
-    'MGA': { name: 'Ariary malgache', flag: 'mg' },
-    'MKD': { name: 'Denar macedonio', flag: 'mk' },
-    'MMK': { name: 'Kyat birmano', flag: 'mm' },
-    'MNT': { name: 'Tugrik mongol', flag: 'mn' },
-    'MOP': { name: 'Pataca de Macao', flag: 'mo' },
-    'MRU': { name: 'Ouguiya mauritana', flag: 'mr' },
-    'MUR': { name: 'Rupia mauriciana', flag: 'mu' },
-    'MVR': { name: 'Rufiyaa maldiva', flag: 'mv' },
-    'MWK': { name: 'Kwacha malauí', flag: 'mw' },
-    'MXN': { name: 'Peso mexicano', flag: 'mx' },
-    'MYR': { name: 'Ringgit malayo', flag: 'my' },
-    'MZN': { name: 'Metical mozambiqueño', flag: 'mz' },
-    'NAD': { name: 'Dólar namibio', flag: 'na' },
-    'NGN': { name: 'Naira nigeriana', flag: 'ng' },
-    'NIO': { name: 'Córdoba nicaragüense', flag: 'ni' },
-    'NOK': { name: 'Corona noruega', flag: 'no' },
-    'NPR': { name: 'Rupia nepalí', flag: 'np' },
-    'NZD': { name: 'Dólar neozelandés', flag: 'nz' },
-    'OMR': { name: 'Rial omaní', flag: 'om' },
-    'PAB': { name: 'Balboa panameño', flag: 'pa' },
-    'PEN': { name: 'Sol peruano', flag: 'pe' },
-    'PGK': { name: 'Kina de Papúa Nueva Guinea', flag: 'pg' },
-    'PHP': { name: 'Peso filipino', flag: 'ph' },
-    'PKR': { name: 'Rupia pakistaní', flag: 'pk' },
-    'PLN': { name: 'Złoty polaco', flag: 'pl' },
-    'PYG': { name: 'Guaraní paraguayo', flag: 'py' },
-    'QAR': { name: 'Riyal catarí', flag: 'qa' },
-    'RON': { name: 'Leu rumano', flag: 'ro' },
-    'RSD': { name: 'Dinar serbio', flag: 'rs' },
-    'RUB': { name: 'Rublo ruso', flag: 'ru' },
-    'RWF': { name: 'Franco ruandés', flag: 'rw' },
-    'SAR': { name: 'Riyal saudí', flag: 'sa' },
-    'SBD': { name: 'Dólar de las Islas Salomón', flag: 'sb' },
-    'SCR': { name: 'Rupia de Seychelles', flag: 'sc' },
-    'SDG': { name: 'Libra sudanesa', flag: 'sd' },
-    'SEK': { name: 'Corona sueca', flag: 'se' },
-    'SGD': { name: 'Dólar de Singapur', flag: 'sg' },
-    'SHP': { name: 'Libra de Santa Elena', flag: 'sh' },
-    'SLE': { name: 'Leona de Sierra Leona', flag: 'sl' },
-    'SOS': { name: 'Chelín somalí', flag: 'so' },
-    'SRD': { name: 'Dólar surinamés', flag: 'sr' },
-    'SSP': { name: 'Libra sursudanesa', flag: 'ss' },
-    'STN': { name: 'Dobra de Santo Tomé y Príncipe', flag: 'st' },
-    'SYP': { name: 'Libra siria', flag: 'sy' },
-    'SZL': { name: 'Lilangeni suazi', flag: 'sz' },
-    'THB': { name: 'Baht tailandés', flag: 'th' },
-    'TJS': { name: 'Somoni tayiko', flag: 'tj' },
-    'TMT': { name: 'Manat turcomano', flag: 'tm' },
-    'TND': { name: 'Dinar tunecino', flag: 'tn' },
-    'TOP': { name: 'Paʻanga tongano', flag: 'to' },
-    'TRY': { name: 'Lira turca', flag: 'tr' },
-    'TTD': { name: 'Dólar de Trinidad y Tobago', flag: 'tt' },
-    'TVD': { name: 'Dólar tuvaluano', flag: 'tv' },
-    'TWD': { name: 'Nuevo dólar taiwanés', flag: 'tw' },
-    'TZS': { name: 'Chelín tanzano', flag: 'tz' },
-    'UAH': { name: 'Grivna ucraniana', flag: 'ua' },
-    'UGX': { name: 'Chelín ugandés', flag: 'ug' },
-    'USD': { name: 'Dólar estadounidense', flag: 'us' },
-    'UYU': { name: 'Peso uruguayo', flag: 'uy' },
-    'UZS': { name: 'Som uzbeko', flag: 'uz' },
-    'VES': { name: 'Bolívar venezolano', flag: 've' },
-    'VND': { name: 'Dong vietnamita', flag: 'vn' },
-    'VUV': { name: 'Vatu vanuatuense', flag: 'vu' },
-    'WST': { name: 'Tala samoano', flag: 'ws' },
-    'XAF': { name: 'Franco CFA BEAC', flag: 'cm' },
-    'XCD': { name: 'Dólar del Caribe Oriental', flag: 'ag' },
-    'XDR': { name: 'Derechos especiales de giro', flag: 'imf' },
-    'XOF': { name: 'Franco CFA BCEAO', flag: 'sn' },
-    'XPF': { name: 'Franco CFP', flag: 'pf' },
-    'YER': { name: 'Rial yemení', flag: 'ye' },
-    'ZAR': { name: 'Rand sudafricano', flag: 'za' },
-    'ZMW': { name: 'Kwacha zambiano', flag: 'zm' },
-    'ZWL': { name: 'Dólar zimbabuense', flag: 'zw' }
-};
-
+            'AED': { name: 'Dírham de EAU', flag: 'ae' },
+            'AFN': { name: 'Afgani afgano', flag: 'af' },
+            'ALL': { name: 'Lek albanés', flag: 'al' },
+            'AMD': { name: 'Dram armenio', flag: 'am' },
+            'ANG': { name: 'Florín antillano neerlandés', flag: 'an' },
+            'AOA': { name: 'Kwanza angoleño', flag: 'ao' },
+            'ARS': { name: 'Peso argentino', flag: 'ar' },
+            'AUD': { name: 'Dólar australiano', flag: 'au' },
+            'AWG': { name: 'Florín arubeño', flag: 'aw' },
+            'AZN': { name: 'Manat azerí', flag: 'az' },
+            'BAM': { name: 'Marco convertible bosnio', flag: 'ba' },
+            'BBD': { name: 'Dólar de Barbados', flag: 'bb' },
+            'BDT': { name: 'Taka bangladesí', flag: 'bd' },
+            'BGN': { name: 'Lev búlgaro', flag: 'bg' },
+            'BHD': { name: 'Dinar bahreiní', flag: 'bh' },
+            'BIF': { name: 'Franco burundés', flag: 'bi' },
+            'BMD': { name: 'Dólar de Bermudas', flag: 'bm' },
+            'BND': { name: 'Dólar de Brunéi', flag: 'bn' },
+            'BOB': { name: 'Boliviano', flag: 'bo' },
+            'BRL': { name: 'Real brasileño', flag: 'br' },
+            'BSD': { name: 'Dólar bahameño', flag: 'bs' },
+            'BTN': { name: 'Ngultrum butanés', flag: 'bt' },
+            'BWP': { name: 'Pula botsuano', flag: 'bw' },
+            'BYN': { name: 'Rublo bielorruso', flag: 'by' },
+            'BZD': { name: 'Dólar de Belice', flag: 'bz' },
+            'CAD': { name: 'Dólar canadiense', flag: 'ca' },
+            'CDF': { name: 'Franco congoleño', flag: 'cd' },
+            'CHF': { name: 'Franco suizo', flag: 'ch' },
+            'CLP': { name: 'Peso chileno', flag: 'cl' },
+            'CNY': { name: 'Yuan chino', flag: 'cn' },
+            'COP': { name: 'Peso colombiano', flag: 'co' },
+            'CRC': { name: 'Colón costarricense', flag: 'cr' },
+            'CUP': { name: 'Peso cubano', flag: 'cu' },
+            'CVE': { name: 'Escudo caboverdiano', flag: 'cv' },
+            'CZK': { name: 'Corona checa', flag: 'cz' },
+            'DJF': { name: 'Franco yibutiano', flag: 'dj' },
+            'DKK': { name: 'Corona danesa', flag: 'dk' },
+            'DOP': { name: 'Peso dominicano', flag: 'do' },
+            'DZD': { name: 'Dinar argelino', flag: 'dz' },
+            'EGP': { name: 'Libra egipcia', flag: 'eg' },
+            'ERN': { name: 'Nakfa eritreo', flag: 'er' },
+            'ETB': { name: 'Birr etíope', flag: 'et' },
+            'EUR': { name: 'Euro', flag: 'eu' },
+            'FJD': { name: 'Dólar fiyiano', flag: 'fj' },
+            'FKP': { name: 'Libra malvinense', flag: 'fk' },
+            'FOK': { name: 'Corona feroesa', flag: 'fo' },
+            'GBP': { name: 'Libra esterlina', flag: 'gb' },
+            'GEL': { name: 'Lari georgiano', flag: 'ge' },
+            'GGP': { name: 'Libra de Guernsey', flag: 'gg' },
+            'GHS': { name: 'Cedi ghanés', flag: 'gh' },
+            'GIP': { name: 'Libra de Gibraltar', flag: 'gi' },
+            'GMD': { name: 'Dalasi gambiano', flag: 'gm' },
+            'GNF': { name: 'Franco guineano', flag: 'gn' },
+            'GTQ': { name: 'Quetzal guatemalteco', flag: 'gt' },
+            'GYD': { name: 'Dólar guyanés', flag: 'gy' },
+            'HKD': { name: 'Dólar de Hong Kong', flag: 'hk' },
+            'HNL': { name: 'Lempira hondureño', flag: 'hn' },
+            'HRK': { name: 'Kuna croata', flag: 'hr' },
+            'HTG': { name: 'Gourde haitiano', flag: 'ht' },
+            'HUF': { name: 'Forinto húngaro', flag: 'hu' },
+            'IDR': { name: 'Rupia indonesia', flag: 'id' },
+            'ILS': { name: 'Nuevo séquel israelí', flag: 'il' },
+            'IMP': { name: 'Libra de la Isla de Man', flag: 'im' },
+            'INR': { name: 'Rupia india', flag: 'in' },
+            'IQD': { name: 'Dinar iraquí', flag: 'iq' },
+            'IRR': { name: 'Rial iraní', flag: 'ir' },
+            'ISK': { name: 'Corona islandesa', flag: 'is' },
+            'JEP': { name: 'Libra de Jersey', flag: 'je' },
+            'JMD': { name: 'Dólar jamaicano', flag: 'jm' },
+            'JOD': { name: 'Dinar jordano', flag: 'jo' },
+            'JPY': { name: 'Yen japonés', flag: 'jp' },
+            'KES': { name: 'Chelín keniano', flag: 'ke' },
+            'KGS': { name: 'Som kirguís', flag: 'kg' },
+            'KHR': { name: 'Riel camboyano', flag: 'kh' },
+            'KID': { name: 'Dólar de Kiribati', flag: 'ki' },
+            'KMF': { name: 'Franco comorense', flag: 'km' },
+            'KRW': { name: 'Won surcoreano', flag: 'kr' },
+            'KWD': { name: 'Dinar kuwaití', flag: 'kw' },
+            'KYD': { name: 'Dólar de las Islas Caimán', flag: 'ky' },
+            'KZT': { name: 'Tenge kazajo', flag: 'kz' },
+            'LAK': { name: 'Kip laosiano', flag: 'la' },
+            'LBP': { name: 'Libra libanesa', flag: 'lb' },
+            'LKR': { name: 'Rupia de Sri Lanka', flag: 'lk' },
+            'LRD': { name: 'Dólar liberiano', flag: 'lr' },
+            'LSL': { name: 'Loti lesotense', flag: 'ls' },
+            'LYD': { name: 'Dinar libio', flag: 'ly' },
+            'MAD': { name: 'Dírham marroquí', flag: 'ma' },
+            'MDL': { name: 'Leu moldavo', flag: 'md' },
+            'MGA': { name: 'Ariary malgache', flag: 'mg' },
+            'MKD': { name: 'Denar macedonio', flag: 'mk' },
+            'MMK': { name: 'Kyat birmano', flag: 'mm' },
+            'MNT': { name: 'Tugrik mongol', flag: 'mn' },
+            'MOP': { name: 'Pataca de Macao', flag: 'mo' },
+            'MRU': { name: 'Ouguiya mauritana', flag: 'mr' },
+            'MUR': { name: 'Rupia mauriciana', flag: 'mu' },
+            'MVR': { name: 'Rufiyaa maldiva', flag: 'mv' },
+            'MWK': { name: 'Kwacha malauí', flag: 'mw' },
+            'MXN': { name: 'Peso mexicano', flag: 'mx' },
+            'MYR': { name: 'Ringgit malayo', flag: 'my' },
+            'MZN': { name: 'Metical mozambiqueño', flag: 'mz' },
+            'NAD': { name: 'Dólar namibio', flag: 'na' },
+            'NGN': { name: 'Naira nigeriana', flag: 'ng' },
+            'NIO': { name: 'Córdoba nicaragüense', flag: 'ni' },
+            'NOK': { name: 'Corona noruega', flag: 'no' },
+            'NPR': { name: 'Rupia nepalí', flag: 'np' },
+            'NZD': { name: 'Dólar neozelandés', flag: 'nz' },
+            'OMR': { name: 'Rial omaní', flag: 'om' },
+            'PAB': { name: 'Balboa panameño', flag: 'pa' },
+            'PEN': { name: 'Sol peruano', flag: 'pe' },
+            'PGK': { name: 'Kina de Papúa Nueva Guinea', flag: 'pg' },
+            'PHP': { name: 'Peso filipino', flag: 'ph' },
+            'PKR': { name: 'Rupia pakistaní', flag: 'pk' },
+            'PLN': { name: 'Złoty polaco', flag: 'pl' },
+            'PYG': { name: 'Guaraní paraguayo', flag: 'py' },
+            'QAR': { name: 'Riyal catarí', flag: 'qa' },
+            'RON': { name: 'Leu rumano', flag: 'ro' },
+            'RSD': { name: 'Dinar serbio', flag: 'rs' },
+            'RUB': { name: 'Rublo ruso', flag: 'ru' },
+            'RWF': { name: 'Franco ruandés', flag: 'rw' },
+            'SAR': { name: 'Riyal saudí', flag: 'sa' },
+            'SBD': { name: 'Dólar de las Islas Salomón', flag: 'sb' },
+            'SCR': { name: 'Rupia de Seychelles', flag: 'sc' },
+            'SDG': { name: 'Libra sudanesa', flag: 'sd' },
+            'SEK': { name: 'Corona sueca', flag: 'se' },
+            'SGD': { name: 'Dólar de Singapur', flag: 'sg' },
+            'SHP': { name: 'Libra de Santa Elena', flag: 'sh' },
+            'SLE': { name: 'Leona de Sierra Leona', flag: 'sl' },
+            'SOS': { name: 'Chelín somalí', flag: 'so' },
+            'SRD': { name: 'Dólar surinamés', flag: 'sr' },
+            'SSP': { name: 'Libra sursudanesa', flag: 'ss' },
+            'STN': { name: 'Dobra de Santo Tomé y Príncipe', flag: 'st' },
+            'SYP': { name: 'Libra siria', flag: 'sy' },
+            'SZL': { name: 'Lilangeni suazi', flag: 'sz' },
+            'THB': { name: 'Baht tailandés', flag: 'th' },
+            'TJS': { name: 'Somoni tayiko', flag: 'tj' },
+            'TMT': { name: 'Manat turcomano', flag: 'tm' },
+            'TND': { name: 'Dinar tunecino', flag: 'tn' },
+            'TOP': { name: 'Paʻanga tongano', flag: 'to' },
+            'TRY': { name: 'Lira turca', flag: 'tr' },
+            'TTD': { name: 'Dólar de Trinidad y Tobago', flag: 'tt' },
+            'TVD': { name: 'Dólar tuvaluano', flag: 'tv' },
+            'TWD': { name: 'Nuevo dólar taiwanés', flag: 'tw' },
+            'TZS': { name: 'Chelín tanzano', flag: 'tz' },
+            'UAH': { name: 'Grivna ucraniana', flag: 'ua' },
+            'UGX': { name: 'Chelín ugandés', flag: 'ug' },
+            'USD': { name: 'Dólar estadounidense', flag: 'us' },
+            'UYU': { name: 'Peso uruguayo', flag: 'uy' },
+            'UZS': { name: 'Som uzbeko', flag: 'uz' },
+            'VES': { name: 'Bolívar venezolano', flag: 've' },
+            'VND': { name: 'Dong vietnamita', flag: 'vn' },
+            'VUV': { name: 'Vatu vanuatuense', flag: 'vu' },
+            'WST': { name: 'Tala samoano', flag: 'ws' },
+            'XAF': { name: 'Franco CFA BEAC', flag: 'cm' },
+            'XCD': { name: 'Dólar del Caribe Oriental', flag: 'ag' },
+            'XDR': { name: 'Derechos especiales de giro', flag: 'imf' },
+            'XOF': { name: 'Franco CFA BCEAO', flag: 'sn' },
+            'XPF': { name: 'Franco CFP', flag: 'pf' },
+            'YER': { name: 'Rial yemení', flag: 'ye' },
+            'ZAR': { name: 'Rand sudafricano', flag: 'za' },
+            'ZMW': { name: 'Kwacha zambiano', flag: 'zm' },
+            'ZWL': { name: 'Dólar zimbabuense', flag: 'zw' }
+        };
 
         function toggleCurrencyList(listId, inputId) {
             const listElement = document.getElementById(listId);
@@ -529,28 +541,17 @@
             function filterCurrencies(searchText) {
                 listElement.innerHTML = '';
                 const searchLower = searchText.toLowerCase();
-                
 
                 Object.entries(currencies).forEach(([code, data]) => {
-                    if (code.toLowerCase().includes(searchLower) || 
+                    if (code.toLowerCase().includes(searchLower) ||
                         data.name.toLowerCase().includes(searchLower)) {
                         addCurrencyToList(code, data);
                     }
                 });
 
-
-                if (Array.isArray(window.apiCurrencies)) {
-                    window.apiCurrencies.forEach(code => {
-                        if (!currencies[code] && code.toLowerCase().includes(searchLower)) {
-                            addCurrencyToList(code);
-                        }
-                    });
-                }
-
                 function addCurrencyToList(code, data = null) {
                     const div = document.createElement('div');
                     if (data) {
-
                         div.innerHTML = `
                             <span class="fi fi-${data.flag}"></span>
                             <span style="margin-left: 8px;">
@@ -561,7 +562,6 @@
                             </span>
                         `;
                     } else {
-
                         div.innerHTML = `
                             <span style="width: 1.5em; text-align: center;">🌐</span>
                             <span style="margin-left: 8px;">
@@ -577,7 +577,6 @@
                 }
             }
 
-
             inputElement.addEventListener('input', (e) => {
                 const searchText = e.target.value;
                 if (!listElement.classList.contains('show')) {
@@ -586,7 +585,6 @@
                 filterCurrencies(searchText);
             });
 
-
             if (!listElement.classList.contains('show')) {
                 filterCurrencies(inputElement.value);
                 listElement.classList.add('show');
@@ -594,16 +592,6 @@
                 listElement.classList.remove('show');
             }
         }
-
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const response = await fetch(`${conversionApiUrl}/currencies`);
-                window.apiCurrencies = await response.json();
-            } catch (error) {
-                console.error('Error al obtener la lista de monedas:', error);
-            }
-        });
 
         document.getElementById('from-list-button').addEventListener('click', (e) => {
             e.stopPropagation();
@@ -627,7 +615,15 @@
             });
         });
 
-        document.getElementById('converter-form').addEventListener('submit', async function(e) {
+        document.getElementById('from-currency').addEventListener('input', () => {
+            toggleCurrencyList('from-currency-list', 'from-currency');
+        });
+
+        document.getElementById('to-currency').addEventListener('input', () => {
+            toggleCurrencyList('to-currency-list', 'to-currency');
+        });
+
+        document.getElementById('converter-form').addEventListener('submit', async function (e) {
             e.preventDefault();
             const fromCurrency = document.getElementById('from-currency').value.trim().toUpperCase();
             const toCurrency = document.getElementById('to-currency').value.trim().toUpperCase();
@@ -690,7 +686,7 @@
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
             const themeToggle = document.querySelector('.theme-toggle i');
-            
+
             if (currentTheme === 'dark') {
                 body.removeAttribute('data-theme');
                 themeToggle.className = 'fas fa-moon';
@@ -701,4 +697,5 @@
         }
     </script>
 </body>
+
 </html>
