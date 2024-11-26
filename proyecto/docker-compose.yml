@@ -1,0 +1,78 @@
+# docker-compose.yml
+
+version: '3.8'
+
+services:
+  backend_rates:
+    build: ./backend_rates
+    environment:
+      - API_KEY=${API_KEY}
+    ports:
+      - "5000:5000"
+    volumes:
+      - exchange_rates_data:/app/data
+    networks:
+      - app-network
+
+  backend_conversion:
+    build: ./backend_conversion
+    depends_on:
+      - backend_rates
+    ports:
+      - "5001:5001"
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend_rates
+      - backend_conversion
+    networks:
+      - app-network
+
+  nginx_proxy_manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx_proxy_manager
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "80:80"    # HTTP
+      - "81:81"    # Interfaz de Nginx Proxy Manager
+      - "443:443"  # HTTPS
+    environment:
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "npm"
+      DB_MYSQL_PASSWORD: "npm"
+      DB_MYSQL_NAME: "npm"
+    volumes:
+      - npm_data:/data
+      - npm_letsencrypt:/etc/letsencrypt
+    networks:
+      - app-network
+
+  db:
+    image: mariadb:10.5
+    container_name: npm_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "npm"
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: "npm"
+    volumes:
+      - npm_db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  exchange_rates_data:
+  npm_data:
+  npm_letsencrypt:
+  npm_db_data:
+
+networks:
+  app-network:
+    driver: bridge
