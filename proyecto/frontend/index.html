@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>💱 Convertidor de Monedas</title>
@@ -203,6 +202,19 @@
             box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
         }
 
+        #clear-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        #clear-button:hover {
+            color: #2980b9;
+        }
+
         #result {
             background: white;
             border-radius: 15px;
@@ -305,6 +317,19 @@
             h1 {
                 font-size: 1.5em;
             }
+
+            .currency-selector {
+                flex-direction: column;
+            }
+
+            button[type="submit"] {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+
+            #clear-button {
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
@@ -344,6 +369,9 @@
                 </div>
                 <button type="submit">
                     <i class="fas fa-calculator"></i> Convertir
+                </button>
+                <button type="button" id="clear-button">
+                    <i class="fas fa-eraser"></i> Limpiar
                 </button>
             </form>
         </div>
@@ -534,17 +562,21 @@
             'ZWL': { name: 'Dólar zimbabuense', flag: 'zw' }
         };
 
+        function normalizeString(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
         function toggleCurrencyList(listId, inputId) {
             const listElement = document.getElementById(listId);
             const inputElement = document.getElementById(inputId);
 
             function filterCurrencies(searchText) {
                 listElement.innerHTML = '';
-                const searchLower = searchText.toLowerCase();
+                const searchLower = normalizeString(searchText);
 
                 Object.entries(currencies).forEach(([code, data]) => {
-                    if (code.toLowerCase().includes(searchLower) ||
-                        data.name.toLowerCase().includes(searchLower)) {
+                    if (normalizeString(code).includes(searchLower) ||
+                        normalizeString(data.name).includes(searchLower)) {
                         addCurrencyToList(code, data);
                     }
                 });
@@ -682,6 +714,14 @@
             }
         });
 
+        document.getElementById('clear-button').addEventListener('click', () => {
+            document.getElementById('from-currency').value = '';
+            document.getElementById('to-currency').value = '';
+            document.getElementById('amount').value = '';
+            document.getElementById('result').innerText = 'Ingresa los datos para ver el resultado aquí.';
+            document.getElementById('result').classList.remove('success', 'error');
+        });
+
         function toggleTheme() {
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
@@ -697,5 +737,4 @@
         }
     </script>
 </body>
-
 </html>
